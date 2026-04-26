@@ -1,0 +1,95 @@
+# DecapCMS 配置
+# 文档: https://decapcms.org/docs/
+
+# 后端配置 - GitHub
+backend:
+  name: github
+  repo: huibun1983/blog
+  branch: main
+  commit_messages:
+    create: '创建文章: {{slug}}'
+    update: '更新文章: {{slug}}'
+    delete: '删除文章: {{slug}}'
+    uploadMedia: '上传媒体: {{path}}'
+    deleteMedia: '删除媒体: {{path}}'
+
+# 媒体文件夹
+media_folder: "public/images"
+public_folder: "/images"
+
+# 网站配置
+site_url: https://your-blog.pages.dev  # ⚠️ 改成你的博客地址
+display_url: https://your-blog.pages.dev
+logo_url: https://your-blog.pages.dev/favicon.ico
+
+# 集合配置 - 文章管理
+collections:
+  # 文章集合
+  - name: "posts"
+    label: "文章"
+    label_singular: "文章"
+    folder: "src/data/posts"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    preview_path: "posts/{{slug}}"
+    fields:
+      # 基本信息
+      - label: "标题"
+        name: "title"
+        widget: "string"
+        hint: "文章的主标题"
+      
+      - label: "发布日期"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        default: ""
+      
+      - label: "摘要"
+        name: "excerpt"
+        widget: "text"
+        hint: "在文章列表中显示的简短描述（1-2句话）"
+      
+      - label: "内容"
+        name: "content"
+        widget: "markdown"
+        hint: "使用 Markdown 格式编写文章内容"
+      
+      # 标签
+      - label: "标签"
+        name: "tags"
+        widget: "list"
+        hint: "添加标签来分类文章，如：React, TypeScript, 前端"
+        default: []
+      
+      # 可选字段
+      - label: "作者"
+        name: "author"
+        widget: "string"
+        required: false
+        hint: "文章作者名称"
+        default: "博客作者"
+      
+      - label: "封面图片"
+        name: "coverImage"
+        widget: "image"
+        required: false
+        hint: "文章封面图片（可选）"
+
+  # 页面集合 - 关于页面等静态页面
+  - name: "pages"
+    label: "页面"
+    folder: "src/data/pages"
+    create: false
+    delete: false
+    slug: "{{slug}}"
+    fields:
+      - label: "标题"
+        name: "title"
+        widget: "string"
+      - label: "内容"
+        name: "content"
+        widget: "markdown"
