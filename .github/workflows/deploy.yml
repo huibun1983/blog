@@ -7,73 +7,28 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      deployments: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
           fetch-depth: 1
-      
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.140.2'
           extended: true
-      
-      - name: Build Hugo
-        run: hugo --minify
-      
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hugo-site
-          path: public
-          
-  deploy-preview:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    
-    environment:
-      name: preview
-      url: ${{ steps.deploy.outputs.url }}
-    
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: hugo-site
-          path: public
-      
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: blog
-          directory: public
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: '3'
 
-  deploy-production:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    environment:
-      name: production
-      url: blog.huibun.workers.dev
-    
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: hugo-site
-          path: public
-      
+      - name: Build Hugo
+        run: hugo --gc --minify
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
