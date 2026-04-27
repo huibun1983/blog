@@ -1,0 +1,43 @@
+baseURL = 'https://blog.huibun.workers.dev/'
+languageCode = 'zh-cn'
+title = '我的博客'
+theme = ["ananke"]
+timeout = "120s"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  author = "胡斌"
+  description = "分享技术心得、生活感悟，记录成长的每一步"
+  email = "huibun@icloud.com"
+  github = "huibun1983"
+  location = "广州"
+  tagline = "全栈开发者 / 技术写作者"
+  
+  # 主题配色
+  background_color = "#ffffff"
+  theme_color = "#3381e8"
+  
+  # 社交链接
+  [[params.social]]
+    name = "GitHub"
+    url = "https://github.com/huibun1983"
+  [[params.social]]
+    name = "Email"
+    url = "mailto:huibun@icloud.com"
+
+# 开启 Markdown 数学公式支持
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+
+# 开启 RSS
+[rss]
+  fullContent = true
+  title = "我的博客"
+  description = "分享技术心得、生活感悟，记录成长的每一步"

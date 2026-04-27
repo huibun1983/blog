@@ -1,0 +1,83 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<main>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>欢迎来到我的博客</h1>
+      <p>分享技术心得、生活感悟，记录成长的每一步</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ "/posts" | absURL }}" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          浏览文章
+        </a>
+        <a href="{{ "/about" | absURL }}" class="btn btn-outline">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          关于我
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Recent Posts -->
+  <section style="background: var(--bg-secondary); padding: 3rem 0;">
+    <div class="container">
+      <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem;">最新文章</h2>
+      
+      {{ range first 3 (where .Site.RegularPages "Type" "posts") }}
+      <article class="post-card">
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <div class="meta">
+          <span>{{ .Date.Format "2006-01-02" }}</span>
+          <span>·</span>
+          <span>{{ .Params.author | default "胡斌" }}</span>
+        </div>
+        <p class="description">{{ .Description }}</p>
+        {{ if .Params.tags }}
+        <div class="tags">
+          {{ range .Params.tags }}
+          <a href="{{ "/tags/" | absURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </article>
+      {{ end }}
+      
+      {{ if gt (len (where .Site.RegularPages "Type" "posts")) 3 }}
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ "/posts" | absURL }}" class="btn btn-outline">
+          查看全部文章 →
+        </a>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  
+  <!-- Tags -->
+  <section style="padding: 3rem 0;">
+    <div class="container">
+      <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem;">热门标签</h2>
+      
+      {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem;">
+          <a href="{{ "/tags/" | absURL }}{{ $name | urlize }}" style="color: var(--accent);">{{ $name }}</a>
+          <span style="color: var(--text-secondary); font-weight: normal; font-size: 0.875rem;">({{ len $taxonomy }})</span>
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          {{ range first 5 $taxonomy }}
+          <a href="{{ .Permalink }}" class="tag" style="font-size: 0.75rem;">{{ .Title }}</a>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+</main>
+{{ end }}

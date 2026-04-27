@@ -1,0 +1,22 @@
+<nav>
+  <div class="container">
+    <a href="{{ "/" | absURL }}" class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      {{ .Site.Title }}
+    </a>
+    
+    <div class="nav-links">
+      <a href="{{ "/" | absURL }}">首页</a>
+      <a href="{{ "/posts" | absURL }}">文章</a>
+      <a href="{{ "/tags" | absURL }}">标签</a>
+      <a href="{{ "/about" | absURL }}">关于</a>
+    </div>
+    
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span>
+    </button>
+  </div>
+</nav>

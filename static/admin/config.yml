@@ -1,0 +1,54 @@
+backend:
+  name: github
+  repo: huibun1983/blog
+  branch: main
+  commit_messages:
+    create: 'Create {{slug}}'
+    update: 'Update {{slug}}'
+    delete: 'Delete {{slug}}'
+    uploadMedia: 'Upload {{path}}'
+    deleteMedia: 'Delete {{path}}'
+
+# 媒体文件存储
+media_folder: "static/images"
+public_folder: "/images"
+
+# 网站 URL 配置
+site_url: https://blog.huibun.workers.dev
+display_url: https://blog.huibun.workers.dev
+logo_url: https://blog.huibun.workers.dev/favicon.ico
+
+# 编辑器设置
+publish_mode: editorial_workflow
+slug:
+  sanitize: true
+  encoding: "unicode"
+
+# 文章集合
+collections:
+  - name: "posts"
+    label: "文章"
+    label_singular: "文章"
+    folder: "content/posts"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "posts/{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "发布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "摘要", name: "description", widget: "text" }
+      - { label: "封面图片", name: "image", widget: "image", required: false }
+      - { label: "标签", name: "tags", widget: "list", required: false }
+      - { label: "作者", name: "author", widget: "string", default: "胡斌" }
+      - { label: "文章内容", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "页面"
+    label_singular: "页面"
+    folder: "content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "链接", name: "permalink", widget: "string", required: false }
+      - { label: "页面内容", name: "body", widget: "markdown" }

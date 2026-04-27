@@ -1,0 +1,25 @@
+{{ define "title" }}#{{ .Title }} - {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<main style="padding: 3rem 0;">
+  <div class="container">
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">
+      标签: <span style="color: var(--accent);">#{{ .Title }}</span>
+    </h1>
+    <p style="color: var(--text-secondary); margin-bottom: 2rem;">共 {{ len .Pages }} 篇文章</p>
+    
+    {{ range .Pages }}
+    <article class="post-card">
+      <h2 style="margin-bottom: 0.5rem;">
+        <a href="{{ .Permalink }}" style="color: var(--text-primary);">{{ .Title }}</a>
+      </h2>
+      <div class="meta">
+        <span>{{ .Date.Format "2006-01-02" }}</span>
+        <span>·</span>
+        <span>{{ .Params.author | default "胡斌" }}</span>
+      </div>
+      <p class="description">{{ .Description }}</p>
+    </article>
+    {{ end }}
+  </div>
+</main>
+{{ end }}

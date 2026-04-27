@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "zh-CN" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ .Site.Params.description | default "分享技术心得、生活感悟" }}">
+  
+  <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+  
+  <!-- SEO -->
+  <link rel="canonical" href="{{ .Permalink }}">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}">
+  <meta property="og:description" content="{{ .Description | default .Site.Params.description }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  
+  {{ if .Params.image }}
+  <meta property="og:image" content="{{ .Params.image | absURL }}">
+  {{ end }}
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }} - {{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Description | default .Site.Params.description }}">
+  
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | absURL }}">
+  
+  <!-- 主题样式 -->
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7f9fc;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --accent: #3381e8;
+      --border: #e2e8f0;
+    }
+    
+    .dark {
+      --bg-primary: #1a202c;
+      --bg-secondary: #2d3748;
+      --text-primary: #f7fafc;
+      --text-secondary: #a0aec0;
+      --accent: #63b3ed;
+      --border: #2d3748;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    
+    /* 导航 */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      background: var(--bg-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    nav .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    nav .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    nav .nav-links a:hover {
+      color: var(--accent);
+    }
+    
+    /* 主题切换 */
+    .theme-toggle {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    
+    /* 文章卡片 */
+    .post-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    
+    .post-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .post-card h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1.5rem;
+    }
+    
+    .post-card h2 a {
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    
+    .post-card h2 a:hover {
+      color: var(--accent);
+    }
+    
+    .post-card .meta {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .post-card .description {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .post-card .tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .tag {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    
+    .tag:hover {
+      background: var(--accent);
+      color: white;
+    }
+    
+    /* 文章内容 */
+    .post-content {
+      max-width: 100%;
+    }
+    
+    .post-content h1, .post-content h2, .post-content h3 {
+      color: var(--text-primary);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .post-content h1 { font-size: 2rem; }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.25rem; }
+    
+    .post-content p {
+      margin-bottom: 1.25rem;
+      color: var(--text-secondary);
+    }
+    
+    .post-content pre {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    
+    .post-content code {
+      font-family: "SF Mono", Consolas, monospace;
+      font-size: 0.875rem;
+    }
+    
+    .post-content pre code {
+      background: none;
+      padding: 0;
+    }
+    
+    .post-content blockquote {
+      border-left: 4px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    
+    .post-content ul, .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--text-secondary);
+    }
+    
+    .post-content img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+    
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    
+    .post-content th, .post-content td {
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      text-align: left;
+    }
+    
+    .post-content th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+    }
+    
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-secondary);
+      margin-top: 3rem;
+    }
+    
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    
+    .btn-outline:hover {
+      background: var(--bg-secondary);
+    }
+    
+    /* 响应式 */
+    @media (max-width: 640px) {
+      nav .container {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      nav .nav-links {
+        gap: 1rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .post-card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>

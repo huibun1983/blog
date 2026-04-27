@@ -1,0 +1,42 @@
+{{ define "title" }}文章列表 - {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<main style="padding: 3rem 0;">
+  <div class="container">
+    <h1 style="font-size: 2rem; margin-bottom: 2rem;">全部文章</h1>
+    
+    {{ $paginator := .Paginate (where .Site.RegularPages "Type" "posts") }}
+    {{ range $paginator.Pages }}
+    <article class="post-card">
+      <h2 style="margin-bottom: 0.5rem;">
+        <a href="{{ .Permalink }}" style="color: var(--text-primary);">{{ .Title }}</a>
+      </h2>
+      <div class="meta">
+        <span>{{ .Date.Format "2006-01-02" }}</span>
+        <span>·</span>
+        <span>{{ .Params.author | default "胡斌" }}</span>
+      </div>
+      <p class="description">{{ .Description }}</p>
+      {{ if .Params.tags }}
+      <div class="tags" style="margin-top: 1rem;">
+        {{ range .Params.tags }}
+        <a href="{{ "/tags/" | absURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+    </article>
+    {{ end }}
+    
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+      {{ if $paginator.HasPrev }}
+      <a href="{{ $paginator.Prev.URL }}" class="btn btn-outline">← 上一页</a>
+      {{ end }}
+      <span style="display: flex; align-items: center; padding: 0 1rem;">{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+      {{ if $paginator.HasNext }}
+      <a href="{{ $paginator.Next.URL }}" class="btn btn-outline">下一页 →</a>
+      {{ end }}
+    </nav>
+    {{ end }}
+  </div>
+</main>
+{{ end }}
